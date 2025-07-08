@@ -1,51 +1,88 @@
-# Genomics_Project
+# Genomics Project
 
+> **Introduction**  
+> This project provides a unified platform for DNA sequence analysis, combining both software (Python) and hardware (Verilog) solutions. It covers classic alignment algorithms, advanced seeding techniques, and efficient hardware implementations, making it suitable for research, education, and FPGA-based genomics acceleration.
 
-This repository contains a **two-part implementation** of core algorithms in genomics for efficient pattern searching and sequence transformation:
-- A **Python-based FM-Index pipeline** using **Suffix Tree**, **BWT**, and **Backward Search**
-- A **Verilog hardware implementation** of the **Burrows-Wheeler Transform (BWT)** for FPGA simulation in Vivado
-
----
-
-##  Project Structure
-
+This repository contains a comprehensive suite of algorithms and hardware modules for efficient DNA sequence analysis, including both Python and Verilog implementations.
 
 ---
 
-## Key Concepts
+## Project Structure
 
-### 1. Python FM-Index (in `Genomics_project_course.ipynb`)
-Implements:
-- **Suffix Tree Construction** from a reference genome
-- **Suffix Array** generation from the tree
-- **Burrows-Wheeler Transform (BWT)**
-- **C Table** and **OCC Table** for FM-index
-- **Seed-based Pattern Search** using **Backward Search**
-- **Read Reconstruction** using retrieved seed positions
-
- Example Input:  
-`reference_genome = "abracadabracadkff"`  
- Output includes:
-- Suffix Array
-- BWT String
-- FM-index tables
-- Seed Search Matches
-- Reconstructed Read Skeleton
-
-### 2.  Verilog BWT Module (in `vivado_verilog/`)
-Implements:
-- BWT computation in hardware using **2-bit encoding per DNA base**
-- Handles the **$** sentinel for correct suffix sorting
-- Uses **bitwise rotation**, **in-place sorting**, and **final decoding**
-
-Test Input (ACGTACGT):  
-`input_dna = 16'b0011011000110110`  
-Output:  
-Displays BWT string with correct character decoding and dollar marker position.
+```
+Genomics_Project-main/
+│
+├── Needleman_Wunsch.ipynb
+├── Smith_Waterman.ipynb
+├── Seeding_Techniques.ipynb
+├── Project Report.pdf
+├── README.md
+│
+├── Needleman_Wunsch_Verilog/
+│   ├── needleman_wunsch.v
+│   ├── tb_needleman_wunsch.v
+│   └── Results/
+│       ├── Power_Report.jpg
+│       ├── Simulation.jpg
+│       └── Utilisation_Report.jpg
+│
+├── Smith_Waterman_Verilog/
+│   ├── smith_waterman.v
+│   ├── tb_smith_waterman.v
+│   └── Results/
+│
+├── Rolling_Hash_Verilog/
+│   ├── dna_base4_hash.v
+│   ├── rolling_hash.v
+│   ├── tb.v
+│   └── Results/
+│
+└── Project_Poster/
+    ├── Poster_Part1.pdf
+    └── Poster_Part2.pdf
+```
 
 ---
 
-##  DNA Base Encoding
+## Key Components
+
+### 1. Python Notebooks
+
+- **[Needleman_Wunsch.ipynb](Needleman_Wunsch.ipynb)**  
+  Implements global alignment (Needleman-Wunsch), seeding, and consensus genome reconstruction from reads.
+
+- **[Smith_Waterman.ipynb](Smith_Waterman.ipynb)**  
+  Implements local alignment (Smith-Waterman), rolling hash seeding, and consensus genome reconstruction.
+
+- **[Seeding_Techniques.ipynb](Seeding_Techniques.ipynb)**  
+  Demonstrates various hash-based seeding strategies: k-mers, minimisers, spaced seeds, strobemers, and fuzzy seeds.
+
+### 2. Verilog Hardware Modules
+
+- **Needleman_Wunsch_Verilog/**  
+  - [`needleman_wunsch.v`](Needleman_Wunsch_Verilog/needleman_wunsch.v): Needleman-Wunsch global alignment hardware implementation  
+  - [`tb_needleman_wunsch.v`](Needleman_Wunsch_Verilog/tb_needleman_wunsch.v): Testbench  
+  - Results: Power, simulation, and utilisation reports
+
+- **Smith_Waterman_Verilog/**  
+  - [`smith_waterman.v`](Smith_Waterman_Verilog/smith_waterman.v): Smith-Waterman local alignment hardware implementation  
+  - [`tb_smith_waterman.v`](Smith_Waterman_Verilog/tb_smith_waterman.v): Testbench  
+  - Results: Simulation outputs
+
+- **Rolling_Hash_Verilog/**  
+  - [`dna_base4_hash.v`](Rolling_Hash_Verilog/dna_base4_hash.v): Base-4 hash computation for DNA  
+  - [`rolling_hash.v`](Rolling_Hash_Verilog/rolling_hash.v): Rolling hash hardware module  
+  - [`tb.v`](Rolling_Hash_Verilog/tb.v): Testbench  
+  - Results: Simulation and schematic images
+
+### 3. Documentation and Reports
+
+- **Project Report.pdf**: Detailed project report
+- **Project_Poster/**: Poster PDFs summarizing the project
+
+---
+
+## DNA Base Encoding
 
 | Base | Binary |
 |------|--------|
@@ -57,46 +94,37 @@ Displays BWT string with correct character decoding and dollar marker position.
 
 ---
 
-##  How to Run
+## How to Run
 
-### Python (FM-index)
-1. Open the notebook:  
-   `python_colab_file/Genomics_project_course.ipynb`
-2. Run all cells to view:
-   - BWT, Suffix Array, Tables
-   - Pattern search and reconstruction output
+### Python Notebooks
 
-### Verilog (BWT on FPGA)
-1. Open `vivado_verilog/` in **Xilinx Vivado**
-2. Add `bwt.v` and `bwt_tb.v` to your project
-3. Simulate the testbench
-4. Observe output:
-   - Binary BWT
-   - Decoded characters
-   - Dollar marker position
+1. Open any of the notebooks (`Needleman_Wunsch.ipynb`, `Smith_Waterman.ipynb`, `Seeding_Techniques.ipynb`) in Jupyter or VS Code.
+2. Run all cells to see:
+   - Alignment results
+   - Seeding and hash table demonstrations
+   - Consensus genome reconstruction
 
----
+### Verilog Modules
 
-##  Reports and Results
-
-###  Simulation Results
-Located in `vivado_verilog/Simulation_Results/`  
-- RTL Simulation Waveform  
-- Console Output (Decoded BWT String)
-
-### Utilization & Power Reports
-Located in `vivado_verilog/Reports/`  
-- Slice LUT utilization  
-- Register and BRAM usage  
-- Power consumption estimates
+1. Open the relevant Verilog folder in your FPGA tool (e.g., Xilinx Vivado).
+2. Add the `.v` files and testbenches to your project.
+3. Simulate the testbench to observe:
+   - Alignment outputs
+   - Hash computation results
+   - Power and utilisation reports (see Results folders)
 
 ---
 
-##  Future Work
+## Results
 
-- Add hardware modules for **FM-index Search**
-- Extend Python pipeline to support **multi-seed reconstruction**
+- Simulation waveforms and output images are in the `Results/` subfolders of each Verilog module.
+- Project report and posters provide further details and analysis.
 
 ---
 
+## Future Work
 
+- Use Tiling Approaches
+- Multi-seed consensus and error correction in Python pipeline
+
+---
